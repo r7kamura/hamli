@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "hamli/version"
+require_relative 'hamli/version'
 
 module Hamli
   class Error < StandardError; end

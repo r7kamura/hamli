@@ -1,13 +1,34 @@
+require:
+  - rubocop-rspec
+
 AllCops:
+  NewCops: enable
+  SuggestExtensions: false
   TargetRubyVersion: 2.6
 
-Style/StringLiterals:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
-Style/StringLiteralsInInterpolation:
-  Enabled: true
-  EnforcedStyle: double_quotes
-
 Layout/LineLength:
-  Max: 120
+  Enabled: false
+
+Lint/InterpolationCheck:
+  Enabled: false
+
+Metrics:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/ImplicitSubject:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
