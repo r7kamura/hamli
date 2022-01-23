@@ -165,20 +165,18 @@ module Hamli
     #            ^^^^^^^^^^^
     #   e.g. %div(a=b)
     #            ^^^^^
-    #   e.g. %div(a: b)
-    #            ^^^^^^
-    #   e.g. %div(a)
-    #            ^^^
+    #   e.g. %div[a, :b]
+    #            ^^^^^^^
     # @return [Array]
     def parse_attribute_braces
       result = []
       loop do
         if @scanner.match?(/\{/)
-          result += parse_old_attributes
+          result += parse_ruby_attributes
         elsif @scanner.match?(/\(/)
-          result += parse_new_attributes
+          result += parse_html_style_attributes
         elsif @scanner.match?(/\[/)
-          result += parse_object_attributes
+          result += parse_object_reference_attributes
         else
           break
         end
@@ -186,11 +184,27 @@ module Hamli
       result
     end
 
-    # Parse old attributes part.
+    # Parse HTML-style attributes part.
+    #   e.g. %div(a=b)
+    #            ^^^^^
+    # @todo
+    def parse_html_style_attributes
+      raise ::NotImplementedError
+    end
+
+    # Parse object reference attributes part.
+    #   e.g. %div[a, :b]
+    #            ^^^^^^^
+    # @todo
+    def parse_object_reference_attributes
+      raise ::NotImplementedError
+    end
+
+    # Parse ruby attributes part.
     #   e.g. %div{:a => "b"}
     #            ^^^^^^^^^^^
     # @return [Array]
-    def parse_old_attributes
+    def parse_ruby_attributes
       begin_ = @scanner.charpos
       count = -1
       value = +''
@@ -207,7 +221,7 @@ module Hamli
           value << @scanner.scan(/[^{}]*/)
         end
       end
-      [:hamli, :old_attributes, begin_, @scanner.charpos, value]
+      [:hamli, :ruby_attributes, begin_, @scanner.charpos, value]
     end
 
     # Parse text block part.
