@@ -21,8 +21,13 @@ module Hamli
 
       parse_indent
 
-      parse_tag_line ||
+      if @scanner.match?(/%/)
+        parse_tag_line
+      elsif @scanner.match?(/[#.]/)
+        parse_div_line
+      else
         parse_text_line
+      end
     end
 
     # @return [Boolean]
@@ -78,33 +83,43 @@ module Hamli
     end
 
     # Parse tag line part.
-    #   e.g. %div abc
-    #        ^^^^^^^^
-    # @return [Boolean]
+    #   e.g. %div{:a => "b"} c
+    #        ^^^^^^^^^^^^^^^^^
     def parse_tag_line
-      if @scanner.scan(/%/)
-        tag_name = parse_tag_name
-        attributes = parse_attributes
-        tag = [:html, :tag, tag_name, attributes]
-        @stacks.last << tag
+      @scanner.pos += 1
+      parse_tag_line_body(tag_name: parse_tag_name)
+    end
 
-        if @scanner.scan(/[ \t]*$/)
-          content = [:multi]
-          tag << content
-          @stacks << content
-        elsif @scanner.skip(/[ \t]*=([<>])*/)
-          # TODO
-        elsif @scanner.skip(%r{[ \t]*/[ \t]*})
-          # TODO
-        else
-          @scanner.scan(/[ \t]+/)
-          tag << [:hamli, :text, parse_text_block]
-        end
-        parse_line_ending
-        true
+    # Parse tag line part where %div is omitted.
+    #   e.g. #a b
+    #        ^^^^
+    def parse_div_line
+      @scanner.pos += 1
+      parse_tag_line_body(tag_name: 'div')
+    end
+
+    # Parse tag line body part.
+    #   e.g. %div{:a => "b"} c
+    #            ^^^^^^^^^^^^^
+    # @param [String] tag_name
+    def parse_tag_line_body(tag_name:)
+      attributes = parse_attributes
+      tag = [:html, :tag, tag_name, attributes]
+      @stacks.last << tag
+
+      if @scanner.scan(/[ \t]*$/)
+        content = [:multi]
+        tag << content
+        @stacks << content
+      elsif @scanner.skip(/[ \t]*=([<>])*/)
+        # TODO
+      elsif @scanner.skip(%r{[ \t]*/[ \t]*})
+        # TODO
       else
-        false
+        @scanner.scan(/[ \t]+/)
+        tag << [:hamli, :text, parse_text_block]
       end
+      parse_line_ending
     end
 
     # Parse tag name part.

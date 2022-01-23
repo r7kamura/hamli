@@ -30,5 +30,8 @@ RSpec/MultipleMemoizedHelpers:
 RSpec/NamedSubject:
   Enabled: false
 
+Style/CaseLikeIf:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
