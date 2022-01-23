@@ -14,7 +14,7 @@ RSpec.describe Hamli::Parser do
       raise NotImplementedError
     end
 
-    context 'with tag' do
+    context 'with tag line' do
       let(:source) do
         <<~HAML
           %div
@@ -28,7 +28,7 @@ RSpec.describe Hamli::Parser do
       end
     end
 
-    context 'with tag with text block' do
+    context 'with tag line text block' do
       let(:source) do
         <<~HAML
           %div a
@@ -37,7 +37,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', %i[html attrs], [:haml, :text, :inline, 'a']], [:newline]]
+          [:multi, [:html, :tag, 'div', %i[html attrs], [:haml, :text, 'a']], [:newline]]
         )
       end
     end
@@ -52,7 +52,21 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, "div", [:html, :attrs], [:multi, [:newline], [:html, :tag, "div", [:html, :attrs], [:multi, [:newline]]]]]]
+          [:multi, [:html, :tag, 'div', %i[html attrs], [:multi, [:newline], [:html, :tag, 'div', %i[html attrs], [:multi, [:newline]]]]]]
+        )
+      end
+    end
+
+    context 'with text line' do
+      let(:source) do
+        <<~HAML
+          a
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:haml, :text, 'a'], [:newline]]
         )
       end
     end

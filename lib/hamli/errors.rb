@@ -36,7 +36,10 @@ module Hamli
       end
     end
 
-    class UnknownLineIndicatorError < HamlSyntaxError
+    class MalformedIndentationError < HamlSyntaxError
+    end
+
+    class UnexpectedIndentationError < HamlSyntaxError
     end
   end
 end

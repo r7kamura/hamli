@@ -22,7 +22,7 @@ module Hamli
       parse_indent
 
       parse_tag_line ||
-        syntax_error!(Errors::UnknownLineIndicatorError)
+        parse_text_line
     end
 
     # @return [Boolean]
@@ -69,6 +69,14 @@ module Hamli
       end
     end
 
+    # Parse text line part.
+    #   e.g. abc
+    #        ^^^
+    def parse_text_line
+      @stacks.last << [:haml, :text, parse_text_block]
+      parse_line_ending
+    end
+
     # Parse tag line part.
     #   e.g. %div abc
     #        ^^^^^^^^
@@ -90,7 +98,7 @@ module Hamli
           # TODO
         else
           @scanner.scan(/[ \t]+/)
-          tag << [:haml, :text, :inline, parse_text_block]
+          tag << [:haml, :text, parse_text_block]
         end
         parse_line_ending
         true
