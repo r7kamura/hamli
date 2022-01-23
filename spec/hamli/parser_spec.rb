@@ -112,5 +112,19 @@ RSpec.describe Hamli::Parser do
         )
       end
     end
+
+    context 'with old attributes' do
+      let(:source) do
+        <<~HAML
+          %div{ :a => b }
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, :hamli, :old_attributes, 4, 15, '{ :a => b }'], [:multi, [:newline]]]]
+        )
+      end
+    end
   end
 end

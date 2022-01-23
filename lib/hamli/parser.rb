@@ -153,15 +153,61 @@ module Hamli
     #        ^^
     #   e.g. %div{:b => "b"}
     #            ^^^^^^^^^^^
+    def parse_attributes
+      attributes = %i[html attrs]
+      attributes += parse_attribute_shortcuts
+      attributes += parse_attribute_braces
+      attributes
+    end
+
+    # Parse attribute braces part.
+    #   e.g. %div{:a => "b"}
+    #            ^^^^^^^^^^^
     #   e.g. %div(a=b)
-    #            ^^^^^^
+    #            ^^^^^
     #   e.g. %div(a: b)
     #            ^^^^^^
     #   e.g. %div(a)
     #            ^^^
-    def parse_attributes
-      attributes = %i[html attrs]
-      attributes + parse_attribute_shortcuts
+    # @return [Array]
+    def parse_attribute_braces
+      result = []
+      loop do
+        if @scanner.match?(/\{/)
+          result += parse_old_attributes
+        elsif @scanner.match?(/\(/)
+          result += parse_new_attributes
+        elsif @scanner.match?(/\[/)
+          result += parse_object_attributes
+        else
+          break
+        end
+      end
+      result
+    end
+
+    # Parse old attributes part.
+    #   e.g. %div{:a => "b"}
+    #            ^^^^^^^^^^^
+    # @return [Array]
+    def parse_old_attributes
+      begin_ = @scanner.charpos
+      count = -1
+      value = +''
+      loop do
+        if @scanner.scan(/\{/)
+          value << @scanner.matched
+          count += 1
+        elsif @scanner.scan(/\}/)
+          value << @scanner.matched
+          break if count.zero?
+
+          count -= 1
+        else
+          value << @scanner.scan(/[^{}]*/)
+        end
+      end
+      [:hamli, :old_attributes, begin_, @scanner.charpos, value]
     end
 
     # Parse text block part.
