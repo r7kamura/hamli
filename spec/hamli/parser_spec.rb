@@ -127,6 +127,20 @@ RSpec.describe Hamli::Parser do
       end
     end
 
+    context 'with Ruby attributes with nested braces' do
+      let(:source) do
+        <<~HAML
+          %div{ :data => { a => b } }
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, :hamli, :ruby_attributes, 4, 27, '{ :data => { a => b } }'], [:multi, [:newline]]]]
+        )
+      end
+    end
+
     context 'with Ruby attributes with line break' do
       let(:source) do
         <<~HAML
