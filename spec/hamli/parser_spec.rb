@@ -84,5 +84,33 @@ RSpec.describe Hamli::Parser do
         )
       end
     end
+
+    context 'with class shortcut' do
+      let(:source) do
+        <<~HAML
+          .a
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, 'class', [:static, 'a']]], [:multi, [:newline]]]]
+        )
+      end
+    end
+
+    context 'with both shortcuts' do
+      let(:source) do
+        <<~HAML
+          .a#b
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, 'class', [:static, 'a']], [:html, :attr, 'id', [:static, 'b']]], [:multi, [:newline]]]]
+        )
+      end
+    end
   end
 end
