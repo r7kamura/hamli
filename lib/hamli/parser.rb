@@ -19,6 +19,8 @@ module Hamli
     def parse_block
       return if parse_blank_line
 
+      parse_indent
+
       parse_tag_line ||
         syntax_error!(Errors::UnknownLineIndicatorError)
     end
@@ -40,6 +42,30 @@ module Hamli
         true
       else
         false
+      end
+    end
+
+    # Parse indent part.
+    # e.g.     %div
+    #      ^^^^
+    def parse_indent
+      @scanner.skip(/[ \t]*/)
+      indent = indent_from_last_match
+      @indents << indent if @indents.empty?
+
+      if indent > @indents.last
+        syntax_error!(Errors::UnexpectedIndentationError) unless expecting_indentation?
+
+        @indents << indent
+      else
+        @stacks.pop if expecting_indentation?
+
+        while indent < @indents.last && @indents.length > 1
+          @indents.pop
+          @stacks.pop
+        end
+
+        syntax_error!(Errors::MalformedIndentationError) if indent != @indents.last
       end
     end
 
@@ -130,6 +156,25 @@ module Hamli
         line: range.line,
         line_number: range.line_number
       )
+    end
+
+    # @return [Integer]
+    def indent_from_last_match
+      @scanner.matched.chars.map do |char|
+        case char
+        when "\t"
+          4
+        when ' '
+          1
+        else
+          0
+        end
+      end.sum(0)
+    end
+
+    # @return [Boolean]
+    def expecting_indentation?
+      @stacks.length > @indents.length
     end
   end
 end

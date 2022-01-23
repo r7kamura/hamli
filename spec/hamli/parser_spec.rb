@@ -41,5 +41,20 @@ RSpec.describe Hamli::Parser do
         )
       end
     end
+
+    context 'with indentation' do
+      let(:source) do
+        <<~HAML
+          %div
+            %div
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, "div", [:html, :attrs], [:multi, [:newline], [:html, :tag, "div", [:html, :attrs], [:multi, [:newline]]]]]]
+        )
+      end
+    end
   end
 end
