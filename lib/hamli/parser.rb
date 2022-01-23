@@ -54,7 +54,7 @@ module Hamli
     # e.g.     %div
     #      ^^^^
     def parse_indent
-      @scanner.skip(/[ \t]*/)
+      @scanner.scan(/[ \t]*/)
       indent = indent_from_last_match
       @indents << indent if @indents.empty?
 
@@ -110,9 +110,9 @@ module Hamli
         content = [:multi]
         tag << content
         @stacks << content
-      elsif @scanner.skip(/[ \t]*=([<>])*/)
+      elsif @scanner.scan(/[ \t]*=([<>])*/)
         # TODO
-      elsif @scanner.skip(%r{[ \t]*/[ \t]*})
+      elsif @scanner.scan(%r{[ \t]*/[ \t]*})
         # TODO
       else
         @scanner.scan(/[ \t]+/)
@@ -175,7 +175,7 @@ module Hamli
       result << interpolate if interpolate
 
       until @scanner.eos?
-        if @scanner.skip(/\r?\n[ \t]*(?=\r?\n)/)
+        if @scanner.scan(/\r?\n[ \t]*(?=\r?\n)/)
           result << [:newline]
           next
         end
