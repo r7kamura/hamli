@@ -94,7 +94,6 @@ module Hamli
     #   e.g. #a b
     #        ^^^^
     def parse_div_line
-      @scanner.pos += 1
       parse_tag_line_body(tag_name: 'div')
     end
 
@@ -131,6 +130,8 @@ module Hamli
     end
 
     # Parse attribute shortcuts part.
+    #   e.g. #a
+    #        ^^
     #   e.g. %div#a
     #            ^^
     #   e.g. %div.a
@@ -148,7 +149,9 @@ module Hamli
     end
 
     # Parse attributes part.
-    #   e.g. %div{:a => "b"}
+    #   e.g. #a
+    #        ^^
+    #   e.g. %div{:b => "b"}
     #            ^^^^^^^^^^^
     #   e.g. %div(a=b)
     #            ^^^^^^
