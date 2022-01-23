@@ -37,7 +37,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', %i[html attrs], [:haml, :text, 'a']], [:newline]]
+          [:multi, [:html, :tag, 'div', %i[html attrs], [:hamli, :text, 'a']], [:newline]]
         )
       end
     end
@@ -66,7 +66,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:haml, :text, 'a'], [:newline]]
+          [:multi, [:hamli, :text, 'a'], [:newline]]
         )
       end
     end

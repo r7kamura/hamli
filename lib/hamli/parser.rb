@@ -73,7 +73,7 @@ module Hamli
     #   e.g. abc
     #        ^^^
     def parse_text_line
-      @stacks.last << [:haml, :text, parse_text_block]
+      @stacks.last << [:hamli, :text, parse_text_block]
       parse_line_ending
     end
 
@@ -98,7 +98,7 @@ module Hamli
           # TODO
         else
           @scanner.scan(/[ \t]+/)
-          tag << [:haml, :text, parse_text_block]
+          tag << [:hamli, :text, parse_text_block]
         end
         parse_line_ending
         true
