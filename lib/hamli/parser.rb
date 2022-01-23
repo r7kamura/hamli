@@ -149,9 +149,40 @@ module Hamli
     # Parse text block part.
     #   e.g. %div abc
     #            ^^^^
-    # @return [String]
+    # @return [Array]
     def parse_text_block
-      @scanner.scan(/.*/)
+      result = [:multi]
+
+      interpolate = parse_interpolate_line
+      result << interpolate if interpolate
+
+      until @scanner.eos?
+        if @scanner.skip(/\r?\n[ \t]*(?=\r?\n)/)
+          result << [:newline]
+          next
+        end
+
+        @scanner.match?(/\r?\n[ \t]*/)
+        indent = indent_from_last_match
+        break if indent <= @indents.last
+
+        @scanner.pos += @scanner.matched_size
+        result << [:newline]
+        result << parse_interpolate_line
+      end
+
+      result
+    end
+
+    # @return [Array, nil]
+    def parse_interpolate_line
+      return unless @scanner.match?(/.+/)
+
+      begin_ = @scanner.charpos
+      value = @scanner.matched
+      @scanner.pos += @scanner.matched_size
+      end_ = @scanner.charpos
+      [:hamli, :interpolate, begin_, end_, value]
     end
 
     # @param [Class] syntax_error_class A child class of Hamli::Errors::HamlSyntaxError.
