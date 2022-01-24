@@ -155,5 +155,118 @@ RSpec.describe Hamli::Parser do
         )
       end
     end
+
+    context 'with HTML-style attributes with boolean value' do
+      let(:source) do
+        <<~HAML
+          %div(a)
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, nil, [:static, true]]], [:multi, [:newline]]]]
+        )
+      end
+    end
+
+    context 'with HTML-style attributes with local variable' do
+      let(:source) do
+        <<~HAML
+          %div(a=b)
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, nil, [:dynamic, 'b']]], [:multi, [:newline]]]]
+        )
+      end
+    end
+
+    context 'with HTML-style attributes with class variable' do
+      let(:source) do
+        <<~HAML
+          %div(a=@@b)
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, nil, [:dynamic, '@@b']]], [:multi, [:newline]]]]
+        )
+      end
+    end
+
+    context 'with HTML-style attributes with instance variable' do
+      let(:source) do
+        <<~HAML
+          %div(a=@b)
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, nil, [:dynamic, '@b']]], [:multi, [:newline]]]]
+        )
+      end
+    end
+
+    context 'with HTML-style attributes with global variable' do
+      let(:source) do
+        <<~HAML
+          %div(a=$b)
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, nil, [:dynamic, '$b']]], [:multi, [:newline]]]]
+        )
+      end
+    end
+
+    context 'with HTML-style attributes with multi keys' do
+      let(:source) do
+        <<~HAML
+          %div(key1=value1 key2=value2)
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, nil, [:dynamic, 'value1']], [:html, :attr, nil, [:dynamic, 'value2']]], [:multi, [:newline]]]]
+        )
+      end
+    end
+
+    context 'with HTML-style attributes with line break' do
+      let(:source) do
+        <<~HAML
+          %div(key1=value1
+               key2=value2)
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, nil, [:dynamic, 'value1']], [:html, :attr, nil, [:dynamic, 'value2']]], [:multi, [:newline]]]]
+        )
+      end
+    end
+
+    context 'with HTML-style attributes with quoted value' do
+      let(:source) do
+        <<~HAML
+          %div(a="b")
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, nil, [:hamli, :interpolate, 8, 9, 'b']]], [:multi, [:newline]]]]
+        )
+      end
+    end
   end
 end

@@ -187,9 +187,76 @@ module Hamli
     # Parse HTML-style attributes part.
     #   e.g. %div(a=b)
     #            ^^^^^
-    # @todo
+    # @return [Array]
     def parse_html_style_attributes
-      raise ::NotImplementedError
+      @scanner.pos += 1
+      result = []
+      until @scanner.scan(/\)/)
+        syntax_error!(Errors::UnexpectedEosError) if @scanner.eos?
+
+        @scanner.scan(/[ \t\r\n]+/)
+
+        if (attribute = parse_html_style_attribute)
+          result << attribute
+        end
+      end
+      result
+    end
+
+    # Parse HTML-style attribute part.
+    #   e.g. %div(key1=value1 key2="value2" key3)
+    #             ^^^^^^^^^^^
+    # @return [Array, nil]
+    def parse_html_style_attribute
+      return unless @scanner.scan(/[-:\w]+/)
+
+      name = @scanner[1]
+
+      @scanner.scan(/[ \t]*/)
+      return [:html, :attr, name, [:static, true]] unless @scanner.scan(/=/)
+
+      @scanner.scan(/[ \t]*/)
+      unless (quote = @scanner.scan(/["']/))
+        return unless (variable = @scanner.scan(/(@@?|\$)?\w+/))
+
+        return [:html, :attr, name, [:dynamic, variable]]
+      end
+
+      [:html, :attr, name, parse_quoted_attribute_value(quote)]
+    end
+
+    # Parse quoted attribute value part.
+    #   e.g. %input(type="text")
+    #                    ^^^^^^
+    # @note Skip closing quote in {}.
+    # @param [String] quote ' or ".
+    # @return [Array]
+    def parse_quoted_attribute_value(quote)
+      begin_ = @scanner.charpos
+      end_ = nil
+      value = +''
+      count = 0
+      loop do
+        if @scanner.match?(/#{quote}/)
+          if count.zero?
+            end_ = @scanner.charpos
+            @scanner.pos += @scanner.matched_size
+            break
+          else
+            @scanner.pos += @scanner.matched_size
+            value << @scanner.matched
+          end
+        elsif @scanner.skip(/\{/)
+          count += 1
+          value << @scanner.matched
+        elsif @scanner.skip(/\}/)
+          count -= 1
+          value << @scanner.matched
+        else
+          value << @scanner.scan(/[^{}#{quote}]*/)
+        end
+      end
+      [:hamli, :interpolate, begin_, end_, value]
     end
 
     # Parse object reference attributes part.

@@ -39,6 +39,9 @@ module Hamli
     class MalformedIndentationError < HamlSyntaxError
     end
 
+    class UnexpectedEosError < HamlSyntaxError
+    end
+
     class UnexpectedIndentationError < HamlSyntaxError
     end
   end
