@@ -42,7 +42,7 @@ module Hamli
 
     # @return [Boolean]
     def parse_line_ending
-      if @scanner.scan(/\R/)
+      if @scanner.scan(/\r?\n/)
         @stacks.last << [:newline]
         true
       else
@@ -229,12 +229,12 @@ module Hamli
       result << interpolate if interpolate
 
       until @scanner.eos?
-        if @scanner.scan(/\R[ \t]*(?=\R)/)
+        if @scanner.scan(/\r?\n[ \t]*(?=\r?\n)/)
           result << [:newline]
           next
         end
 
-        @scanner.match?(/\R[ \t]*/)
+        @scanner.match?(/\r?\n[ \t]*/)
         indent = indent_from_last_match
         break if indent <= @indents.last
 
