@@ -172,11 +172,11 @@ module Hamli
       result = []
       loop do
         if @scanner.match?(/\{/)
-          result += parse_ruby_attributes
+          result += [parse_ruby_attributes]
         elsif @scanner.match?(/\(/)
           result += parse_html_style_attributes
         elsif @scanner.match?(/\[/)
-          result += parse_object_reference_attributes
+          result += [parse_object_reference]
         else
           break
         end
@@ -262,9 +262,19 @@ module Hamli
     # Parse object reference attributes part.
     #   e.g. %div[a, :b]
     #            ^^^^^^^
-    # @todo
-    def parse_object_reference_attributes
-      raise ::NotImplementedError
+    # @return [Array]
+    def parse_object_reference
+      begin_ = @scanner.charpos
+      value = @scanner.scan(
+        /
+          (?<brackets>
+            \[
+              (?:[^\[\]] | \g<brackets>)*
+            \]
+          )
+        /x
+      )
+      [:hamli, :object_reference, begin_, @scanner.charpos, value]
     end
 
     # Parse ruby attributes part.

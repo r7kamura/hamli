@@ -122,7 +122,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', [:html, :attrs, :hamli, :ruby_attributes, 4, 15, '{ :a => b }'], [:multi, [:newline]]]]
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :ruby_attributes, 4, 15, '{ :a => b }']], [:multi, [:newline]]]]
         )
       end
     end
@@ -136,7 +136,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', [:html, :attrs, :hamli, :ruby_attributes, 4, 27, '{ :data => { a => b } }'], [:multi, [:newline]]]]
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :ruby_attributes, 4, 27, '{ :data => { a => b } }']], [:multi, [:newline]]]]
         )
       end
     end
@@ -151,7 +151,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', [:html, :attrs, :hamli, :ruby_attributes, 4, 29, "{ :a => b,\n      :c => d}"], [:multi, [:newline]]]]
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :ruby_attributes, 4, 29, "{ :a => b,\n      :c => d}"]], [:multi, [:newline]]]]
         )
       end
     end
@@ -265,6 +265,34 @@ RSpec.describe Hamli::Parser do
       it 'returns expected S-expression' do
         is_expected.to eq(
           [:multi, [:html, :tag, 'div', [:html, :attrs, [:html, :attr, nil, [:hamli, :interpolate, 8, 9, 'b']]], [:multi, [:newline]]]]
+        )
+      end
+    end
+
+    context 'with object reference' do
+      let(:source) do
+        <<~HAML
+          %div[@user, :greeting]
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :object_reference, 4, 22, '[@user, :greeting]']], [:multi, [:newline]]]]
+        )
+      end
+    end
+
+    context 'with object reference and Ruby attributes' do
+      let(:source) do
+        <<~HAML
+          %div[user]{:class => 'alpha bravo'}
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :object_reference, 4, 10, '[user]'], [:hamli, :ruby_attributes, 10, 35, "{:class => 'alpha bravo'}"]], [:multi, [:newline]]]]
         )
       end
     end
