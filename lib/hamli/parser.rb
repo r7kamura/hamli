@@ -156,7 +156,7 @@ module Hamli
     def parse_attributes
       attributes = %i[html attrs]
       attributes += parse_attribute_shortcuts
-      attributes += parse_attribute_braces
+      attributes += parse_attributes_groups
       attributes
     end
 
@@ -168,7 +168,7 @@ module Hamli
     #   e.g. %div[a, :b]
     #            ^^^^^^^
     # @return [Array]
-    def parse_attribute_braces
+    def parse_attributes_groups
       result = []
       loop do
         if @scanner.match?(/\{/)
