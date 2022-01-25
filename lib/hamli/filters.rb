@@ -2,7 +2,7 @@
 
 module Hamli
   module Filters
-    autoload :Base, 'slimi/filters/base'
-    autoload :Interpolation, 'slimi/filters/interpolation'
+    autoload :Base, 'hamli/filters/base'
+    autoload :Interpolation, 'hamli/filters/interpolation'
   end
 end
