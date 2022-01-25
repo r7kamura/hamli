@@ -274,7 +274,7 @@ module Hamli
           )
         /x
       )
-      [:hamli, :object_reference, begin_, @scanner.charpos, value]
+      [:hamli, :object_reference, [:hamli, :position, begin_, @scanner.charpos, value]]
     end
 
     # Parse ruby attributes part.
@@ -292,7 +292,7 @@ module Hamli
           )
         /x
       )
-      [:hamli, :ruby_attributes, begin_, @scanner.charpos, value]
+      [:hamli, :ruby_attributes, [:hamli, :position, begin_, @scanner.charpos, value]]
     end
 
     # Parse text block part.

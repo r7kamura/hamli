@@ -122,7 +122,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :ruby_attributes, 4, 15, '{ :a => b }']], [:multi, [:newline]]]]
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :ruby_attributes, [:hamli, :position, 4, 15, '{ :a => b }']]], [:multi, [:newline]]]]
         )
       end
     end
@@ -136,7 +136,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :ruby_attributes, 4, 27, '{ :data => { a => b } }']], [:multi, [:newline]]]]
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :ruby_attributes, [:hamli, :position, 4, 27, '{ :data => { a => b } }']]], [:multi, [:newline]]]]
         )
       end
     end
@@ -151,7 +151,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :ruby_attributes, 4, 29, "{ :a => b,\n      :c => d}"]], [:multi, [:newline]]]]
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :ruby_attributes, [:hamli, :position, 4, 29, "{ :a => b,\n      :c => d}"]]], [:multi, [:newline]]]]
         )
       end
     end
@@ -278,7 +278,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :object_reference, 4, 22, '[@user, :greeting]']], [:multi, [:newline]]]]
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :object_reference, [:hamli, :position, 4, 22, '[@user, :greeting]']]], [:multi, [:newline]]]]
         )
       end
     end
@@ -292,7 +292,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :object_reference, 4, 10, '[user]'], [:hamli, :ruby_attributes, 10, 35, "{:class => 'alpha bravo'}"]], [:multi, [:newline]]]]
+          [:multi, [:html, :tag, 'div', [:html, :attrs, [:hamli, :object_reference, [:hamli, :position, 4, 10, '[user]']], [:hamli, :ruby_attributes, [:hamli, :position, 10, 35, "{:class => 'alpha bravo'}"]]], [:multi, [:newline]]]]
         )
       end
     end
