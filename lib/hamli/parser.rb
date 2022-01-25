@@ -25,6 +25,8 @@ module Hamli
         parse_tag_line
       elsif @scanner.match?(/[#.]/)
         parse_div_line
+      elsif @scanner.match?(%r{/\[})
+        parse_html_conditional_comment_line
       elsif @scanner.match?(%r{/})
         parse_html_comment_line
       else
@@ -304,6 +306,26 @@ module Hamli
         /x
       )
       [:hamli, :ruby_attributes, [:hamli, :position, begin_, @scanner.charpos, value]]
+    end
+
+    # Parse HTML comment part.
+    #   e.g. /[if IE]
+    #        ^^^^^^^^
+    def parse_html_conditional_comment_line
+      @scanner.pos += 1
+      condition = @scanner.scan(
+        /
+          (?<brackets>
+            \[
+              (?:[^\[\]] | \g<brackets>)*
+            \]
+          )
+        /x
+      )
+      block = [:multi]
+      @stacks.last << [:html, :condcomment, condition, block]
+      @stacks << block
+      parse_line_ending
     end
 
     # Parse HTML comment part.

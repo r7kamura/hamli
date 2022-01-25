@@ -339,5 +339,20 @@ RSpec.describe Hamli::Parser do
         )
       end
     end
+
+    context 'with HTML conditional comment' do
+      let(:source) do
+        <<~HAML
+          /[if IE]
+            %div a
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :condcomment, '[if IE]', [:multi, [:newline], [:html, :tag, 'div', %i[html attrs], [:hamli, :text, [:multi, [:hamli, :interpolate, 16, 17, 'a']]]], [:newline]]]]
+        )
+      end
+    end
   end
 end
