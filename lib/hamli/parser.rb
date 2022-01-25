@@ -25,6 +25,8 @@ module Hamli
         parse_tag_line
       elsif @scanner.match?(/[#.]/)
         parse_div_line
+      elsif @scanner.match?(%r{/})
+        parse_html_comment_line
       else
         parse_text_line
       end
@@ -302,6 +304,19 @@ module Hamli
         /x
       )
       [:hamli, :ruby_attributes, [:hamli, :position, begin_, @scanner.charpos, value]]
+    end
+
+    # Parse HTML comment part.
+    #   e.g. / abc
+    #        ^^^^^
+    def parse_html_comment_line
+      @scanner.pos += 1
+      block = [:multi]
+      block << [:static, @scanner.scan(/[^\r\n]*/)]
+      tag = [:html, :comment, block]
+      @stacks.last << tag
+      @stacks << block
+      parse_line_ending
     end
 
     # Parse text block part.

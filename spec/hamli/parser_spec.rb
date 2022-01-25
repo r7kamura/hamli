@@ -310,5 +310,34 @@ RSpec.describe Hamli::Parser do
         )
       end
     end
+
+    context 'with HTML comment' do
+      let(:source) do
+        <<~HAML
+          / a
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :comment, [:multi, [:static, ' a'], [:newline]]]]
+        )
+      end
+    end
+
+    context 'with HTML comment with indent' do
+      let(:source) do
+        <<~HAML
+          /
+            %div a
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :comment, [:multi, [:static, ''], [:newline], [:html, :tag, 'div', %i[html attrs], [:hamli, :text, [:multi, [:hamli, :interpolate, 9, 10, 'a']]]], [:newline]]]]
+        )
+      end
+    end
   end
 end
