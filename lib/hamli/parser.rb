@@ -122,7 +122,7 @@ module Hamli
         tag << [:hamli, :position, begin_, end_, [:hamli, :output, content, block]]
         @stacks << block
       elsif @scanner.scan(%r{[ \t]*/[ \t]*})
-        # TODO
+        # Does nothing.
       else
         @scanner.scan(/[ \t]+/)
         tag << [:hamli, :text, parse_text_block]
