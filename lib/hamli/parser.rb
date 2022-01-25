@@ -110,8 +110,17 @@ module Hamli
         content = [:multi]
         tag << content
         @stacks << content
-      elsif @scanner.scan(/[ \t]*=([<>])*/)
-        # TODO
+      elsif @scanner.scan(/[ \t]*([<>]*)=/)
+        # white_space_marker = @scanner[1]
+        # without_outer_white_space = white_space_marker.include?('>') # TODO
+        # without_inner_white_space = white_space_marker.include?('<') # TODO
+        @scanner.skip(/[ \t]+/)
+        begin_ = @scanner.charpos
+        content = parse_broken_lines
+        end_ = @scanner.charpos
+        block = [:multi]
+        tag << [:hamli, :position, begin_, end_, [:hamli, :output, content, block]]
+        @stacks << block
       elsif @scanner.scan(%r{[ \t]*/[ \t]*})
         # TODO
       else
@@ -332,6 +341,21 @@ module Hamli
       @scanner.pos += @scanner.matched_size
       end_ = @scanner.charpos
       [:hamli, :interpolate, begin_, end_, value]
+    end
+
+    # @note Broken line means line-breaked lines, separated by trailing "," or "|".
+    # @return [String]
+    def parse_broken_lines
+      result = +''
+      result << @scanner.scan(/[^\r\n]*/)
+      while result.end_with?(',') || result.end_with?('|')
+        syntax_error!(Errors::UnexpectedEosError) unless @scanner.scan(/\r?\n/)
+
+        result.delete_suffix('|')
+        result << "\n"
+        result << @scanner.scan(/[^\r\n]*/)
+      end
+      result
     end
 
     # @param [Class] syntax_error_class A child class of Hamli::Errors::HamlSyntaxError.

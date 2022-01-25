@@ -296,5 +296,19 @@ RSpec.describe Hamli::Parser do
         )
       end
     end
+
+    context 'with tag name and output block' do
+      let(:source) do
+        <<~HAML
+          %div= a
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', %i[html attrs], [:hamli, :position, 6, 7, [:hamli, :output, 'a', [:multi, [:newline]]]]]]
+        )
+      end
+    end
   end
 end
