@@ -313,8 +313,7 @@ module Hamli
       @scanner.pos += 1
       block = [:multi]
       block << [:static, @scanner.scan(/[^\r\n]*/)]
-      tag = [:html, :comment, block]
-      @stacks.last << tag
+      @stacks.last << [:html, :comment, block]
       @stacks << block
       parse_line_ending
     end
