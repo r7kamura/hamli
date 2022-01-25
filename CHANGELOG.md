@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.2.0 - 2022-01-25
+
 ### Added
 
 - Add Interpolation Filter.
