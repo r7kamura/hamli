@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Fix error from parse_text_block on some case.
+
 ## 0.3.0 - 2022-01-26
 
 ### Added

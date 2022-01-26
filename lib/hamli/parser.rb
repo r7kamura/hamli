@@ -446,7 +446,7 @@ module Hamli
 
     # @return [Integer]
     def indent_from_last_match
-      @scanner.matched.chars.map do |char|
+      (@scanner.matched || '').chars.map do |char|
         case char
         when "\t"
           4
