@@ -9,6 +9,7 @@
 - Support HTML conditional comment line.
 - Support Haml comment line.
 - Support output line.
+- Support control line.
 
 ## 0.2.0 - 2022-01-25
 

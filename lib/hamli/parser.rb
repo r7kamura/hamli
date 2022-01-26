@@ -31,8 +31,10 @@ module Hamli
         parse_html_comment_line
       elsif @scanner.match?(/-#/)
         parse_haml_comment_line
+      elsif @scanner.match?(/-/)
+        parse_control_line
       elsif @scanner.match?(/=/)
-        parser_output_line
+        parse_output_line
       else
         parse_text_line
       end
@@ -397,14 +399,21 @@ module Hamli
     # Parse output line part.
     #   e.g. = abc
     #        ^^^^^
-    def parser_output_line
+    def parse_output_line
+      parse_control_line(name: :output)
+    end
+
+    # Parse control line part.
+    #   e.g. - abc
+    #        ^^^^^
+    def parse_control_line(name: :control)
       @scanner.pos += 1
       @scanner.scan(/[ \t]*/)
       block = [:multi]
       begin_ = @scanner.charpos
       content = parse_broken_lines
       end_ = @scanner.charpos
-      @stacks.last << [:hamli, :position, begin_, end_, [:hamli, :output, content, block]]
+      @stacks.last << [:hamli, :position, begin_, end_, [:hamli, name, content, block]]
       @stacks << block
     end
 
