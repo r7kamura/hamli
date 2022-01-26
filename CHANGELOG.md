@@ -10,6 +10,7 @@
 
 - Fix error from parse_text_block on some case.
 - Fix filter bug on :text node.
+- Fix parse_interpolate_line bug.
 
 ## 0.3.0 - 2022-01-26
 

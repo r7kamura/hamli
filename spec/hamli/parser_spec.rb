@@ -31,7 +31,7 @@ RSpec.describe Hamli::Parser do
     context 'with tag line text block' do
       let(:source) do
         <<~HAML
-          %div a
+          %div a b
         HAML
       end
 

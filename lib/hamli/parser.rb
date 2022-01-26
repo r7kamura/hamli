@@ -391,7 +391,7 @@ module Hamli
 
     # @return [Array, nil]
     def parse_interpolate_line
-      return unless @scanner.match?(/[^\r\n]/)
+      return unless @scanner.match?(/[^\r\n]+/)
 
       begin_ = @scanner.charpos
       value = @scanner.matched
