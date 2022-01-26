@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.4.0 - 2022-01-26
+
 ### Added
 
 - Add :file option for better error report.
