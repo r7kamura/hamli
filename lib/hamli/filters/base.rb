@@ -14,11 +14,10 @@ module Hamli
         [:hamli, :position, begin_, end_, compile(expression)]
       end
 
-      # @param [String] type
       # @param [Array] expression
       # @return [Array]
-      def on_hamli_text(type, expression)
-        [:hamli, :text, type, compile(expression)]
+      def on_hamli_text(expression)
+        [:hamli, :text, compile(expression)]
       end
     end
   end

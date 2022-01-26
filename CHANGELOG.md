@@ -5,6 +5,7 @@
 ### Fixed
 
 - Fix error from parse_text_block on some case.
+- Fix filter bug on :text node.
 
 ## 0.3.0 - 2022-01-26
 
