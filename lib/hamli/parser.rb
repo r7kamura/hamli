@@ -4,6 +4,10 @@ require 'temple'
 
 module Hamli
   class Parser < ::Temple::Parser
+    define_options(
+      :file
+    )
+
     # @param [String] source Haml template source.
     # @return [Array]
     def call(source)

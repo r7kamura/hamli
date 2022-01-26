@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Add :file option for better error report.
+
 ### Fixed
 
 - Fix error from parse_text_block on some case.
