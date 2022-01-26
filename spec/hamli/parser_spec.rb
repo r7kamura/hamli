@@ -384,5 +384,34 @@ RSpec.describe Hamli::Parser do
         )
       end
     end
+
+    context 'with output line' do
+      let(:source) do
+        <<~HAML
+          = a
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:hamli, :position, 2, 3, [:hamli, :output, 'a', [:multi, [:newline]]]]]
+        )
+      end
+    end
+
+    context 'with output line with line break' do
+      let(:source) do
+        <<~HAML
+          = a,
+              b
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:hamli, :position, 2, 10, [:hamli, :output, "a,\n    b", [:multi, [:newline]]]]]
+        )
+      end
+    end
   end
 end
