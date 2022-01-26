@@ -360,8 +360,9 @@ module Hamli
     #        ^^^^^^
     def parse_haml_comment_line
       @scanner.pos += 2
+      @scanner.scan(/[^\r\n]*/)
       while !@scanner.eos? && (@scanner.match?(/[ \t]*(?=\r|$)/) || peek_indent > @indents.last)
-        @scanner.skip(/[^\r\n]*/)
+        @scanner.scan(/[^\r\n]*/)
         parse_line_ending
       end
     end

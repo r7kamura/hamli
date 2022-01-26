@@ -385,6 +385,21 @@ RSpec.describe Hamli::Parser do
       end
     end
 
+    context 'with Haml comment in tag' do
+      let(:source) do
+        <<~HAML
+          %div
+            -# a
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:html, :tag, 'div', %i[html attrs], [:multi, [:newline], [:newline]]]]
+        )
+      end
+    end
+
     context 'with control line' do
       let(:source) do
         <<~HAML
