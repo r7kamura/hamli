@@ -435,11 +435,14 @@ module Hamli
       while result.end_with?(',') || result.end_with?('|')
         syntax_error!(Errors::UnexpectedEosError) unless @scanner.scan(/\r?\n/)
 
-        result.delete_suffix('|')
         result << "\n"
         result << @scanner.scan(/[^\r\n]*/)
       end
-      result
+      lines = result.lines
+      if lines.length >= 2 && lines.all? { |line| line.end_with?("|\n") }
+        result.gsub!(/\|$/, '')
+      end
+      result.delete_suffix("\n")
     end
 
     # @param [Class] syntax_error_class A child class of Hamli::Errors::HamlSyntaxError.

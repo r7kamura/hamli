@@ -12,6 +12,7 @@
 - Fix filter bug on :text node.
 - Fix parse_interpolate_line bug.
 - Fix haml comment parser bug.
+- Fix pipe multi-line handling.
 
 ## 0.3.0 - 2022-01-26
 

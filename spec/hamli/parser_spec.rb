@@ -414,6 +414,35 @@ RSpec.describe Hamli::Parser do
       end
     end
 
+    context 'with control line with pipe multi-line' do
+      let(:source) do
+        <<~HAML
+          - a |
+            b |
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:hamli, :position, 2, 12, [:hamli, :control, "a \n  b ", [:multi]]]]
+        )
+      end
+    end
+
+    context 'with control line that ends with pipe' do
+      let(:source) do
+        <<~HAML
+          - a do |b|
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:hamli, :position, 2, 11, [:hamli, :control, "a do |b|", [:multi]]]]
+        )
+      end
+    end
+
     context 'with output line' do
       let(:source) do
         <<~HAML
