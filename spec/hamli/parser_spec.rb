@@ -438,7 +438,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:hamli, :position, 2, 11, [:hamli, :control, "a do |b|", [:multi]]]]
+          [:multi, [:hamli, :position, 2, 11, [:hamli, :control, 'a do |b|', [:multi]]]]
         )
       end
     end

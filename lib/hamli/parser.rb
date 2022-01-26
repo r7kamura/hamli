@@ -439,9 +439,7 @@ module Hamli
         result << @scanner.scan(/[^\r\n]*/)
       end
       lines = result.lines
-      if lines.length >= 2 && lines.all? { |line| line.end_with?("|\n") }
-        result.gsub!(/\|$/, '')
-      end
+      result.gsub!(/\|$/, '') if lines.length >= 2 && lines.all? { |line| line.end_with?("|\n") }
       result.delete_suffix("\n")
     end
 
