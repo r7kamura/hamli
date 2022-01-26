@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0 - 2022-01-26
+
 ### Added
 
 - Support output block in tag line.
