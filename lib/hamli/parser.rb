@@ -29,6 +29,8 @@ module Hamli
         parse_html_conditional_comment_line
       elsif @scanner.match?(%r{/})
         parse_html_comment_line
+      elsif @scanner.match?(/-#/)
+        parse_haml_comment_line
       else
         parse_text_line
       end
@@ -340,6 +342,17 @@ module Hamli
       parse_line_ending
     end
 
+    # Parse Haml comment part.
+    #   e.g. -# abc
+    #        ^^^^^^
+    def parse_haml_comment_line
+      @scanner.pos += 2
+      while !@scanner.eos? && (@scanner.match?(/[ \t]*(?=\r|$)/) || peek_indent > @indents.last)
+        @scanner.skip(/[^\r\n]*/)
+        parse_line_ending
+      end
+    end
+
     # Parse text block part.
     #   e.g. %div abc
     #            ^^^^
@@ -423,6 +436,12 @@ module Hamli
     # @return [Boolean]
     def expecting_indentation?
       @stacks.length > @indents.length
+    end
+
+    # @return [Integer] Indent level.
+    def peek_indent
+      @scanner.match?(/[ \t]*/)
+      indent_from_last_match
     end
   end
 end

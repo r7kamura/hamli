@@ -7,6 +7,7 @@
 - Support output block in tag line.
 - Support HTML comment line.
 - Support HTML conditional comment line.
+- Support Haml comment line.
 
 ## 0.2.0 - 2022-01-25
 
