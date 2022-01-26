@@ -369,7 +369,7 @@ RSpec.describe Hamli::Parser do
       end
     end
 
-    context 'with Haml comment' do
+    context 'with Haml comment with indent' do
       let(:source) do
         <<~HAML
           -#
