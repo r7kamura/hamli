@@ -8,6 +8,11 @@ module Hamli
       :file
     )
 
+    def initialize(_options = {})
+      super
+      @file_path = options[:file] || '(__TEMPLATE__)'
+    end
+
     # @param [String] source Haml template source.
     # @return [Array]
     def call(source)
