@@ -44,6 +44,8 @@ module Hamli
         parse_control_line
       elsif @scanner.match?(/=/)
         parse_output_line
+      elsif @scanner.match?(/&=/)
+        parse_escaped_output_line
       else
         parse_text_line
       end
@@ -138,7 +140,7 @@ module Hamli
         content = parse_broken_lines
         end_ = @scanner.charpos
         block = [:multi]
-        tag << [:hamli, :position, begin_, end_, [:hamli, :output, content, block]]
+        tag << [:hamli, :position, begin_, end_, [:hamli, :output, false, content, block]]
         @stacks << block
       elsif @scanner.scan(%r{[ \t]*/[ \t]*})
         # Does nothing.
@@ -406,24 +408,42 @@ module Hamli
       [:hamli, :interpolate, begin_, end_, value]
     end
 
+    # Parse escaped output line part.
+    #   e.g. &= abc
+    #        ^^^^^^
+    def parse_escaped_output_line
+      @scanner.pos += 2
+      @scanner.scan(/[ \t]*/)
+      parse_ruby_line(escaped: true, name: :output)
+    end
+
     # Parse output line part.
     #   e.g. = abc
     #        ^^^^^
     def parse_output_line
-      parse_control_line(name: :output)
+      @scanner.pos += 1
+      @scanner.scan(/[ \t]*/)
+      parse_ruby_line(escaped: false, name: :output)
     end
 
     # Parse control line part.
     #   e.g. - abc
     #        ^^^^^
-    def parse_control_line(name: :control)
+    def parse_control_line
       @scanner.pos += 1
+      @scanner.scan(/[ \t]*/)
+      parse_ruby_line(escaped: false, name: :control)
+    end
+
+    # @param [Boolean] escaped
+    # @param [Symbol] name
+    def parse_ruby_line(escaped:, name:)
       @scanner.scan(/[ \t]*/)
       block = [:multi]
       begin_ = @scanner.charpos
       content = parse_broken_lines
       end_ = @scanner.charpos
-      @stacks.last << [:hamli, :position, begin_, end_, [:hamli, name, content, block]]
+      @stacks.last << [:hamli, :position, begin_, end_, [:hamli, name, escaped, content, block]]
       @stacks << block
     end
 

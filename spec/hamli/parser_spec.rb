@@ -306,7 +306,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:html, :tag, 'div', %i[html attrs], [:hamli, :position, 6, 7, [:hamli, :output, 'a', [:multi, [:newline]]]]]]
+          [:multi, [:html, :tag, 'div', %i[html attrs], [:hamli, :position, 6, 7, [:hamli, :output, false, 'a', [:multi, [:newline]]]]]]
         )
       end
     end
@@ -409,7 +409,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:hamli, :position, 2, 3, [:hamli, :control, 'a', [:multi, [:newline]]]]]
+          [:multi, [:hamli, :position, 2, 3, [:hamli, :control, false, 'a', [:multi, [:newline]]]]]
         )
       end
     end
@@ -424,7 +424,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:hamli, :position, 2, 12, [:hamli, :control, "a \n  b ", [:multi]]]]
+          [:multi, [:hamli, :position, 2, 12, [:hamli, :control, false, "a \n  b ", [:multi]]]]
         )
       end
     end
@@ -438,7 +438,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:hamli, :position, 2, 11, [:hamli, :control, 'a do |b|', [:multi]]]]
+          [:multi, [:hamli, :position, 2, 11, [:hamli, :control, false, 'a do |b|', [:multi]]]]
         )
       end
     end
@@ -452,7 +452,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:hamli, :position, 2, 3, [:hamli, :output, 'a', [:multi, [:newline]]]]]
+          [:multi, [:hamli, :position, 2, 3, [:hamli, :output, false, 'a', [:multi, [:newline]]]]]
         )
       end
     end
@@ -467,7 +467,21 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:hamli, :position, 2, 10, [:hamli, :output, "a,\n    b", [:multi, [:newline]]]]]
+          [:multi, [:hamli, :position, 2, 10, [:hamli, :output, false, "a,\n    b", [:multi, [:newline]]]]]
+        )
+      end
+    end
+
+    context 'with escaped output line' do
+      let(:source) do
+        <<~HAML
+          &= a
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        is_expected.to eq(
+          [:multi, [:hamli, :position, 3, 4, [:hamli, :output, true, 'a', [:multi, [:newline]]]]]
         )
       end
     end

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Support escaped output line.
+
 ## 0.4.0 - 2022-01-26
 
 ### Added
