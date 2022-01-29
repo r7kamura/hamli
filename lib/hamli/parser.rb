@@ -46,6 +46,8 @@ module Hamli
         parse_output_line
       elsif @scanner.match?(/&=/)
         parse_escaped_output_line
+      elsif @scanner.match?(/!=/)
+        parse_non_escaped_output_line
       else
         parse_text_line
       end
@@ -406,6 +408,15 @@ module Hamli
       @scanner.pos += @scanner.matched_size
       end_ = @scanner.charpos
       [:hamli, :interpolate, begin_, end_, value]
+    end
+
+    # Parse escaped output line part.
+    #   e.g. != abc
+    #        ^^^^^^
+    # @todo Support :escape_html option on this parser, then rethink about escaping.
+    def parse_non_escaped_output_line
+      @scanner.pos += 1
+      parse_output_line
     end
 
     # Parse escaped output line part.

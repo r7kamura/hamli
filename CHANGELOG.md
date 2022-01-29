@@ -5,6 +5,7 @@
 ### Added
 
 - Support escaped output line.
+- Support non-escaped output line.
 
 ## 0.4.0 - 2022-01-26
 
