@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    hamli (0.5.0)
+    hamli (0.5.1)
       temple
 
 GEM
