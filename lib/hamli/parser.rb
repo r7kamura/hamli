@@ -463,7 +463,7 @@ module Hamli
     def parse_broken_lines
       result = +''
       result << @scanner.scan(/[^\r\n]*/)
-      while result.end_with?(',') || result.end_with?('|')
+      while result.end_with?(',') || (result.end_with?('|') && (result !~ /\bdo\s*\|[^|]*\|\z/))
         syntax_error!(Errors::UnexpectedEosError) unless @scanner.scan(/\r?\n/)
 
         result << "\n"

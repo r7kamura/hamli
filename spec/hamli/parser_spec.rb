@@ -438,7 +438,7 @@ RSpec.describe Hamli::Parser do
 
       it 'returns expected S-expression' do
         is_expected.to eq(
-          [:multi, [:hamli, :position, 2, 11, [:hamli, :control, false, 'a do |b|', [:multi]]]]
+          [:multi, [:hamli, :position, 2, 10, [:hamli, :control, false, 'a do |b|', [:multi, [:newline]]]]]
         )
       end
     end
@@ -497,6 +497,25 @@ RSpec.describe Hamli::Parser do
         is_expected.to eq(
           [:multi, [:hamli, :position, 3, 4, [:hamli, :output, false, 'a', [:multi, [:newline]]]]]
         )
+      end
+    end
+
+    context 'when using a block variable' do
+      let(:source) do
+        <<~HAML
+          - a do |b|
+            .row
+              .cell
+            .row
+              .cell
+        HAML
+      end
+
+      it 'returns expected S-expression' do
+        row = [:html, :tag, 'div', [:html, :attrs, [:html, :attr, 'class', [:static, 'row']]], [:multi, [:newline], [:html, :tag, 'div', [:html, :attrs, [:html, :attr, 'class', [:static, 'cell']]], [:multi, [:newline]]]]]
+        multi = [:multi, [:hamli, :position, 2, 10, [:hamli, :control, false, 'a do |b|', [:multi, [:newline], row, row]]]]
+
+        is_expected.to eq(multi)
       end
     end
   end
