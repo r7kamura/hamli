@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- Fix Ruby blocks parsing.
+
 ## 0.5.0 - 2022-01-30
 
 ### Added
