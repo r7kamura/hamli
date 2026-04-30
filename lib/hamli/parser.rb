@@ -54,7 +54,7 @@ module Hamli
     end
 
     # @return [Boolean]
-    def parse_blank_line
+    def parse_blank_line # rubocop:disable Naming/PredicateMethod
       if @scanner.scan(/[ \t]*$/)
         parse_line_ending
         true
@@ -64,7 +64,7 @@ module Hamli
     end
 
     # @return [Boolean]
-    def parse_line_ending
+    def parse_line_ending # rubocop:disable Naming/PredicateMethod
       if @scanner.scan(/\r?\n/)
         @stacks.last << [:newline]
         true
