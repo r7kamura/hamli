@@ -223,7 +223,7 @@ module Hamli
     def parse_html_style_attributes
       @scanner.pos += 1
       result = []
-      until @scanner.scan(/\)/) # rubocop:disable Style/RedundantRegexpArgument
+      until @scanner.scan(')')
         syntax_error!(Errors::UnexpectedEosError) if @scanner.eos?
 
         @scanner.scan(/[ \t\r\n]+/)
@@ -245,7 +245,7 @@ module Hamli
       name = @scanner[1]
 
       @scanner.scan(/[ \t]*/)
-      return [:html, :attr, name, [:static, true]] unless @scanner.scan(/=/) # rubocop:disable Style/RedundantRegexpArgument
+      return [:html, :attr, name, [:static, true]] unless @scanner.scan('=')
 
       @scanner.scan(/[ \t]*/)
       unless (quote = @scanner.scan(/["']/))
