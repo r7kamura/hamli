@@ -13,7 +13,7 @@ module Hamli
         scanner = ::StringScanner.new(string)
         until scanner.eos?
           charpos = scanner.charpos
-          if (value = scanner.scan(/\\#\{/))
+          if (value = scanner.scan(/\\#\{/)) # rubocop:disable Style/RedundantRegexpArgument
             block << [:static, value]
           elsif scanner.scan(/#\{((?>[^{}]|(\{(?>[^{}]|\g<1>)*\}))*)\}/)
             code = scanner[1]

@@ -54,7 +54,7 @@ module Hamli
     end
 
     # @return [Boolean]
-    def parse_blank_line
+    def parse_blank_line # rubocop:disable Naming/PredicateMethod
       if @scanner.scan(/[ \t]*$/)
         parse_line_ending
         true
@@ -64,7 +64,7 @@ module Hamli
     end
 
     # @return [Boolean]
-    def parse_line_ending
+    def parse_line_ending # rubocop:disable Naming/PredicateMethod
       if @scanner.scan(/\r?\n/)
         @stacks.last << [:newline]
         true
@@ -223,7 +223,7 @@ module Hamli
     def parse_html_style_attributes
       @scanner.pos += 1
       result = []
-      until @scanner.scan(/\)/)
+      until @scanner.scan(/\)/) # rubocop:disable Style/RedundantRegexpArgument
         syntax_error!(Errors::UnexpectedEosError) if @scanner.eos?
 
         @scanner.scan(/[ \t\r\n]+/)
@@ -245,7 +245,7 @@ module Hamli
       name = @scanner[1]
 
       @scanner.scan(/[ \t]*/)
-      return [:html, :attr, name, [:static, true]] unless @scanner.scan(/=/)
+      return [:html, :attr, name, [:static, true]] unless @scanner.scan(/=/) # rubocop:disable Style/RedundantRegexpArgument
 
       @scanner.scan(/[ \t]*/)
       unless (quote = @scanner.scan(/["']/))
@@ -497,7 +497,7 @@ module Hamli
         else
           0
         end
-      end.sum(0)
+      end.sum
     end
 
     # @return [Boolean]
