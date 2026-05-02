@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.6.0 - 2026-05-02
+
 - Drop support for Ruby versions earlier than 3.3.
 
 ## 0.5.1 - 2022-06-29
