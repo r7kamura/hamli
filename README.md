@@ -1,7 +1,6 @@
 # Hamli
 
 [![CI](https://github.com/r7kamura/hamli/actions/workflows/ci.yml/badge.svg)](https://github.com/r7kamura/hamli/actions/workflows/ci.yml)
-[![Gem Version](https://badge.fury.io/rb/hamli.svg)](https://rubygems.org/gems/hamli)
 
 Yet another implementation for [Haml](https://github.com/haml/haml) template language.
 
