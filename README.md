@@ -1,7 +1,5 @@
 # Hamli
 
-[![CI](https://github.com/r7kamura/hamli/actions/workflows/ci.yml/badge.svg)](https://github.com/r7kamura/hamli/actions/workflows/ci.yml)
-
 Yet another implementation for [Haml](https://github.com/haml/haml) template language.
 
 Hamli is used by [Hamlcop](https://github.com/r7kamura/hamlcop).
